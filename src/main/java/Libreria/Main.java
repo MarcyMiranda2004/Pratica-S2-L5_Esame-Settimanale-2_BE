@@ -1,17 +1,69 @@
 package Libreria;
 
-import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+class ISBNAlreadyExistsException extends Exception {
+    public ISBNAlreadyExistsException(String message) {
+        super(message);
+    }
+}
+
+class ElementNotFoundException extends Exception {
+    public ElementNotFoundException(String message) {
+        super(message);
+    }
+}
 
 public class Main {
     public static void main(String[] args) {
-//        Libro l1 = new Libro(001L, "il Signore Degli Anelli: La Compagnia Dell'Anello", LocalDate.of(1954, 7, 29), 423, "J.R.R. Tolkien", "Fantasy");
-//        Libro l2 = new Libro(002L,   "Le Montagne della Follia", LocalDate.of(1936, 2, 1), 192, "H.P. Lovecraft", "Horror");
-//        Libro l3 = new Libro(003L,   "La Fattoria degli Animali", LocalDate.of(1945, 8, 17), 141, "George Orwell", "Satira");
-//
-//        Rivista r1 = new Rivista(004L, "Weekly Shōnen Jump", LocalDate.of(2025, 5, 15), 80, Periodicita.SETTIMANALE);
-//        Rivista r2 = new Rivista(005L, "Manga Isho", LocalDate.of(2025, 5, 1), 150, Periodicita.MENSILE);
-//        Rivista r3 = new Rivista(006L, "JOJO Megazine", LocalDate.of(2025, 5, 10), 120, Periodicita.SEMESTRALE);
-//
+        Scanner scan = new Scanner(System.in);
+        Archivio archivio = new Archivio();
+        boolean running = true;
+
+        while (running) {
+            menu();
+            int selection = scan.nextInt();
+            scan.nextLine();
+
+            try {
+                switch (selection) {
+                    case 1 -> archivio.aggiungiElemento(scan);
+                    case 2 -> archivio.ricercaPerISBN(scan);
+                    case 3 -> archivio.rimuoviElemento(scan);
+                    case 4 -> archivio.ricercaPerAnno(scan);
+                    case 5 -> archivio.ricercaPerAutore(scan);
+                    case 6 -> archivio.aggiornaElemento(scan);
+                    case 7 -> archivio.stampaStatistiche();
+                    case 8 -> archivio.visualizzaElementi();
+                    case 0 -> {
+                        System.out.println("Uscita in corso...");
+                        running = false;
+                    }
+                    default -> System.out.println("Operazione non implementata o scelta non valida.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Errore di input. Inserisci un numero valido.");
+                scan.nextLine();
+            } catch (ISBNAlreadyExistsException | ElementNotFoundException e) {
+                System.out.println("Errore: " + e.getMessage());
+            }
+        }
+        scan.close();
     }
 
+    private static void menu() {
+        System.out.println("\nGestionale Libreria: Ciao, che operazione vuoi effettuare?");
+        System.out.println("""
+                1: Aggiungi un nuovo elemento all'archivio.
+                2: Ricerca un elemento tramite ISBN.
+                3: Rimuovi un elemento dal catalogo tramite ISBN.
+                4: Ricerca un elemento per anno di pubblicazione.
+                5: Ricerca un elemento per autore.
+                6: Aggiorna un elemento tramite ISBN.
+                7: Stampa statistiche del catalogo.
+                8: Visualizza tutti gli elementi.
+                0: Esci.
+                """);
+    }
 }
