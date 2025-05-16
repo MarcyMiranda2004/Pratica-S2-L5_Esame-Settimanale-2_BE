@@ -3,6 +3,7 @@ package Libreria;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+//gestione ecezioni
 class ISBNAlreadyExistsException extends Exception {
     public ISBNAlreadyExistsException(String message) {
         super(message);
@@ -15,6 +16,7 @@ class ElementNotFoundException extends Exception {
     }
 }
 
+//main
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -52,6 +54,7 @@ public class Main {
         scan.close();
     }
 
+    //menu
     private static void menu() {
         System.out.println("\nGestionale Libreria: Ciao, che operazione vuoi effettuare?");
         System.out.println("""
